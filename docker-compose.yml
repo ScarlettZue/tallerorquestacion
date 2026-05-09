@@ -1,5 +1,21 @@
 services:
 
+  mystore_ms:
+    build:
+      context: ./bigstore_ms
+      dockerfile: Dockerfile
+    restart: always
+    depends_on:
+        - bigstoredb
+    environment:
+      DB_HOST: ${MYSQL_HOST}
+      DB_PORT: ${MYSQL_PORT}
+      DB_USER: ${MYSQL_USER}
+      DB_PASSWORD: ${MYSQL_PASSWORD}
+      DB_NAME: ${MYSQL_DATABASE}
+      URL : ${URL}
+    ports:
+      - "4000:4000" 
 
   bigstoredb:
     image: mysql:8.0
