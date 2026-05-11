@@ -1,5 +1,22 @@
 services:
 
+  mystore_ms:
+    build:
+      context: ./bigstore_ms
+      dockerfile: Dockerfile
+    restart: always
+    depends_on:
+        bigstoredb:
+          condition: service_healthy
+    environment:
+      DB_HOST: ${MYSQL_HOST}
+      DB_PORT: ${MYSQL_PORT}
+      DB_USER: ${MYSQL_USER}
+      DB_PASSWORD: ${MYSQL_PASSWORD}
+      DB_NAME: ${MYSQL_DATABASE}
+      URL : ${URL}
+    ports:
+      - "4000:4000" 
 
   bigstoredb:
     image: mysql:8.0
@@ -12,7 +29,11 @@ services:
       - "3306:3306"
     volumes:
       - mysql-data:/var/lib/mysql
-
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s  
+      retries: 5     
+      start_period: 10s 
 
   adminer:
     image: adminer:4.8.1
