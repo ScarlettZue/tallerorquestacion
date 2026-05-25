@@ -1,5 +1,15 @@
 services:
 
+  mystore_frontend:
+    build:
+      context: ./mystore_frontend
+      dockerfile: Dockerfile
+    restart: always
+    depends_on:
+       - mystore_ms
+    ports:
+      - "8085:80"
+      
   mystore_ms:
     build:
       context: ./bigstore_ms
@@ -34,7 +44,7 @@ services:
       interval: 10s  
       retries: 5     
       start_period: 10s 
-
+      
   adminer:
     image: adminer:4.8.1
     restart: always

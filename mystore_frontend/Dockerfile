@@ -1,9 +1,12 @@
 # Etapa de construcción
-FROM node:19-alpine3.17 AS build
+FROM node:18 AS build
 WORKDIR /app
 COPY package*.json ./
-RUN npm install
+RUN npm ci
 COPY . .
+
+RUN chmod -R +x node_modules/.bin
+
 RUN npm run build
 
 # Etapa de producción
